@@ -12,10 +12,10 @@
               <q-item :key="product.id" class="q-py-none">
                 <q-item-section>
                   <q-item-label>{{product.name}} {{product.amount > 1 ? `X ${product.amount}` : ''}}</q-item-label>
-                  <q-item-label caption v-if="product.add">
+                  <q-item-label caption v-if="product.add.length > 0">
                     Ekle: {{product.add.join(', ')}}
                   </q-item-label>
-                  <q-item-label caption v-if="product.remove">
+                  <q-item-label caption v-if="product.remove.length > 0">
                     Çıkar: {{product.remove.join(', ')}}
                   </q-item-label>
                 </q-item-section>
