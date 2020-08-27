@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar>
         <q-toolbar-title class="text-center">
-          Quasar App
+          Restaurant App
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
