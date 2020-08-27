@@ -131,6 +131,8 @@ export default {
         return v
       })
       this.dialog = false
+      this.amount = 1
+      this.dialogProduct = null
     }
   },
   data: () => ({
