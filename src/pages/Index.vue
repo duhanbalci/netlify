@@ -116,7 +116,7 @@ let URL
 if (process.env.DEV) {
   URL = 'http://127.0.0.1:3000'
 } else {
-  URL = 'http://restoranke.heroku.app'
+  URL = 'https://app.dhnprojects.tk'
 }
 export default {
   name: 'PageIndex',
