@@ -77,7 +77,7 @@
           <template v-for="product in l.products">
             <q-item :key="product.id+100" class="q-py-none">
               <q-item-section avatar v-if="product.picture">
-                <q-img :src="`http://127.0.0.1:3000/${product.picture}`" height="60px" width="60px" />
+                <q-img :src="`https://app.dhnprojects.tk/${product.picture}`" height="60px" width="60px" />
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{product.name}}</q-item-label>
