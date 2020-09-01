@@ -46,14 +46,14 @@
               <q-btn :ripple="false" icon="remove" flat size="sm" dense @click="amount--" />
             </div>
           </div>
-          <div class="q-mb-md" v-if="dialogProduct.addable">
+          <div class="q-mb-md" v-if="dialogProduct.addable.length">
             <div class="text-subtitle2">Eklenebilir Malzemeler</div>
             <q-chip :color="dialogProduct.addable[i].value ? 'orange' : 'white'"
               :selected.sync="dialogProduct.addable[i].value" v-for="(v, i) in dialogProduct.addable" :key="v.name">
               {{v.name}}
             </q-chip>
           </div>
-          <div class="q-mb-md" v-if="dialogProduct.removable">
+          <div class="q-mb-md" v-if="dialogProduct.removable.length">
             <div class="text-subtitle2" v-if="dialogProduct.removable">Çıkarılabilir Malzemeler</div>
             <q-chip :color="dialogProduct.removable[i].value ? 'orange' : 'white'"
               :selected.sync="dialogProduct.removable[i].value" v-for="(v, i) in dialogProduct.removable" :key="v.name">
