@@ -14,10 +14,18 @@ Vue.use(Vuex)
  * with the Store instance.
  */
 
-export default function (/* { ssrContext } */) {
+export default function ( /* { ssrContext } */ ) {
   const Store = new Vuex.Store({
     modules: {
       // example
+    },
+    state: {
+      tableName: ''
+    },
+    mutations: {
+      changeTableName(state, payload) {
+        state.tableName = payload
+      }
     },
 
     // enable strict mode (adds overhead!)

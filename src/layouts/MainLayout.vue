@@ -2,9 +2,12 @@
   <q-layout view="lHh Lpr lFf">
     <q-header>
       <q-toolbar>
-        <q-toolbar-title class="text-center">
+        <q-toolbar-title>
           Restaurant App
         </q-toolbar-title>
+        <div>
+          {{$store.state.tableName}}
+        </div>
       </q-toolbar>
     </q-header>
     <q-page-container>
