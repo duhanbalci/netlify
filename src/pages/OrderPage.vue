@@ -90,7 +90,7 @@
               </q-item-section>
             </q-item>
           </q-list>
-          <q-btn color="green" class="full-width" @click="order">Siparişi Ver</q-btn>
+          <q-btn color="blue" class="full-width">Hesabı Öde</q-btn>
         </q-card-section>
       </q-card>
     </q-dialog>
