@@ -201,6 +201,7 @@
           this.dialogCart = false
           this.cart = []
           const res = await this.$axios.get(`${URL}/product/menu/${this.$route.params.id}/${this.$route.params.token}`)
+          const p = res.data.products
           for(let i = 0; i < p.length; i++) {
             this.bill.push({
               id: p[i].id,
