@@ -8,6 +8,7 @@
             <div v-for="product in cart" :key="product.id">
               <q-item class="q-py-none">
                 <q-item-section>
+                  <q-btn icon="remove_circle" dense @click="removeFromCart(product.id)" />
                   <q-item-label>{{product.name}} {{product.amount > 1 ? `X ${product.amount}` : ''}}</q-item-label>
                   <q-item-label caption v-if="product.add.length > 0">
                     Ekle: {{product.add.join(', ')}}
@@ -218,6 +219,13 @@
             type: 'negative',
             message: `Hata: ${error.response.data.message}`
           })
+        }
+      },
+      removeFromCart(id) {
+        for(let i = 0; i < this.cart.length; i++) {
+          if(this.cart[i].id == id) {
+            this.cart.splice(i,1)
+          }
         }
       }
     },
