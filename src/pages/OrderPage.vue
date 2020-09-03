@@ -8,8 +8,9 @@
             <div v-for="product in cart" :key="product.id">
               <q-item class="q-py-none">
                 <q-item-section>
-                  <q-btn icon="remove_circle" dense @click="removeFromCart(product.id)" />
-                  <q-item-label>{{product.name}} {{product.amount > 1 ? `X ${product.amount}` : ''}}</q-item-label>
+                  <q-item-label>
+                    <q-btn icon="clear" color="red" size="md" flat dense @click="removeFromCart(product.id)" />
+                    {{product.name}} {{product.amount > 1 ? `X ${product.amount}` : ''}}</q-item-label>
                   <q-item-label caption v-if="product.add.length > 0">
                     Ekle: {{product.add.join(', ')}}
                   </q-item-label>
@@ -140,6 +141,7 @@
   let URL
   if (process.env.DEV) {
     URL = 'http://192.168.0.105:3000'
+    URL = 'https://app.dhnprojects.tk'
   } else {
     URL = 'https://app.dhnprojects.tk'
   }
