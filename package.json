@@ -13,6 +13,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
+    "nanoid": "^3.1.12",
     "quasar": "^1.0.0"
   },
   "devDependencies": {
@@ -32,7 +33,7 @@
     "last 10 Firefox versions",
     "last 4 Edge versions",
     "last 7 Safari versions",
-    "last 50 Android versions",
+    "last 10 Android versions",
     "last 8 ChromeAndroid versions",
     "last 8 FirefoxAndroid versions",
     "last 10 iOS versions",
