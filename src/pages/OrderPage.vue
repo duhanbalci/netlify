@@ -235,7 +235,9 @@
             <q-item :key="product.id + 100" class="q-py-none">
               <q-item-section avatar v-if="product.picture">
                 <q-img
-                  :src="`https://app.dhnprojects.tk/${product.picture}`"
+                  :src="
+                    `https://shoppictures.ams3.cdn.digitaloceanspaces.com/${product.picture}`
+                  "
                   height="60px"
                   width="60px"
                 />
