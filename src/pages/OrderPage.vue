@@ -328,6 +328,7 @@ export default {
           }
         );
         this.authenticated = true;
+        await this.fetchBill()
       } catch (err) {
         console.log(err);
       }
@@ -338,18 +339,28 @@ export default {
       );
       this.list = res.data.category;
       this.tab = this.list[0].id;
-      const p = res.data.products;
       this.$store.commit("changeTableName", res.data.table);
-      // for (let i = 0; i < p.length; i++) {
-      //   this.bill.push({
-      //     id: p[i].id,
-      //     name: p[i].name,
-      //     amount: p[i].amount,
-      //     addp: p[i].addp,
-      //     remove: p[i].remove,
-      //     price: p[i].price
-      //   });
-      // }
+    },
+    async fetchBill() {
+      try {
+        const res = await this.$axios.get(
+          `${URL}/table/bill/${this.$route.params.id}`
+        );
+        const p = res.data;
+        for (let i = 0; i < p.length; i++) {
+          this.bill.push({
+            id: p[i].id,
+            name: p[i].name,
+            amount: p[i].amount,
+            addp: p[i].addp,
+            remove: p[i].remove,
+            price: p[i].price
+          });
+        }
+      } catch(err) {
+        console.log(err)
+      }
+
     },
     openDialog(obj) {
       // this.cart.push(obj)
@@ -400,26 +411,6 @@ export default {
         });
         this.dialogCart = false;
         this.cart = [];
-        const res = await this.$axios.get(
-          `${URL}/product/menu/${this.$route.params.id}`,
-          {
-            headers: {
-              authorization: `Bearer ${this.$route.params.token}`
-            }
-          }
-        );
-        const p = res.data.products;
-        this.bill = [];
-        for (let i = 0; i < p.length; i++) {
-          this.bill.push({
-            id: p[i].id,
-            name: p[i].name,
-            amount: p[i].amount,
-            addp: p[i].addp,
-            remove: p[i].remove,
-            price: p[i].price
-          });
-        }
       } catch (error) {
         console.log(error);
         this.$q.notify({
