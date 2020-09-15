@@ -169,7 +169,7 @@
       v-model="dialogBill"
     >
       <q-card class="full-width">
-        <q-card-section class="full-width">
+        <q-card-section class="full-width" v-if="bill.length">
           <q-list>
             <div v-for="product in bill" :key="product.orderID">
               <q-item class="q-py-none">
@@ -200,7 +200,7 @@
               </q-item>
               <q-separator spaced inset />
             </div>
-            <!-- <q-item v-if="bill.length">
+            <q-item v-if="bill.length">
               <q-item-section>Toplam: </q-item-section>
               <q-item-section side>
                 ₺{{
@@ -216,7 +216,7 @@
                     .reduce((acc, val) => acc + val, 0) / 100
                 }}
               </q-item-section>
-            </q-item> -->
+            </q-item>
           </q-list>
           <q-btn color="blue" class="full-width">Hesabı Öde</q-btn>
         </q-card-section>
@@ -340,16 +340,16 @@ export default {
       this.tab = this.list[0].id;
       const p = res.data.products;
       this.$store.commit("changeTableName", res.data.table);
-      for (let i = 0; i < p.length; i++) {
-        this.bill.push({
-          id: p[i].id,
-          name: p[i].name,
-          amount: p[i].amount,
-          addp: p[i].addp,
-          remove: p[i].remove,
-          price: p[i].price
-        });
-      }
+      // for (let i = 0; i < p.length; i++) {
+      //   this.bill.push({
+      //     id: p[i].id,
+      //     name: p[i].name,
+      //     amount: p[i].amount,
+      //     addp: p[i].addp,
+      //     remove: p[i].remove,
+      //     price: p[i].price
+      //   });
+      // }
     },
     openDialog(obj) {
       // this.cart.push(obj)
