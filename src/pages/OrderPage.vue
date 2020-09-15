@@ -351,7 +351,7 @@ export default {
             }
           }
         );
-        const p = res.data;
+        const p = res.data.map(v => v.products).flat(1);
         for (let i = 0; i < p.length; i++) {
           this.bill.push({
             id: p[i].id,
