@@ -200,7 +200,7 @@
               </q-item>
               <q-separator spaced inset />
             </div>
-            <q-item v-if="bill.length">
+            <!-- <q-item v-if="bill.length">
               <q-item-section>Toplam: </q-item-section>
               <q-item-section side>
                 ₺{{
@@ -216,7 +216,7 @@
                     .reduce((acc, val) => acc + val, 0) / 100
                 }}
               </q-item-section>
-            </q-item>
+            </q-item> -->
           </q-list>
           <q-btn color="blue" class="full-width">Hesabı Öde</q-btn>
         </q-card-section>
