@@ -344,7 +344,12 @@ export default {
     async fetchBill() {
       try {
         const res = await this.$axios.get(
-          `${URL}/table/bill/${this.$route.params.id}`
+          `${URL}/table/bill/${this.$route.params.id}`,
+          {
+            headers: {
+              authorization: `Bearer ${this.$route.params.token}`
+            }
+          }
         );
         const p = res.data;
         for (let i = 0; i < p.length; i++) {
