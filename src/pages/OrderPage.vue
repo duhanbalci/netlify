@@ -416,6 +416,7 @@ export default {
         });
         this.dialogCart = false;
         this.cart = [];
+        await this.fetchBill();
       } catch (error) {
         console.log(error);
         this.$q.notify({
