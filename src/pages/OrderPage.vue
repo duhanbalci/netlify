@@ -177,26 +177,26 @@
                   <q-item-label>
                     {{ product.name }}
                     {{ product.amount > 1 ? `X ${product.amount}` : "" }} -
-                    <span
-                      class="p-1 text-sm bg-orange-500"
+                    <q-badge
+                      color="amber"
+                      label="Bekliyor"
                       v-if="product.status === 'waiting'"
-                      >Bekliyor</span
-                    >
-                    <span
-                      class="p-1 text-sm bg-teal-500"
+                    />
+                    <q-badge
+                      color="blue"
+                      label="Onaylandı"
                       v-if="product.status === 'approved'"
-                      >Onaylandı</span
-                    >
-                    <span
-                      class="p-1 text-sm bg-green-500"
+                    />
+                    <q-badge
+                      color="green"
+                      label="Hazır"
                       v-if="product.status === 'ready'"
-                      >Hazır</span
-                    >
-                    <span
-                      class="p-1 text-sm bg-gray-500"
+                    />
+                    <q-badge
+                      color="grey"
+                      label="Servis Edildi"
                       v-if="product.status === 'done'"
-                      >Servis Edildi</span
-                    >
+                    />
                   </q-item-label>
                   <q-item-label caption v-if="product.addp.length">
                     Ekle: {{ product.addp.map(v => v.name).join(", ") }}
