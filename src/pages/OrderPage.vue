@@ -320,7 +320,7 @@ export default {
     async checkToken() {
       try {
         await this.$axios.get(
-          `${URL}/table/checktoken/${this.$route.params.id}`,
+          `${URL}/table/checktoken`,
           {
             headers: {
               authorization: `Bearer ${this.$route.params.token}`
