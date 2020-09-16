@@ -374,7 +374,8 @@ export default {
             amount: p[i].amount,
             addp: p[i].addp,
             remove: p[i].remove,
-            price: p[i].price
+            price: p[i].price,
+            status: p[i].status
           });
         }
       } catch (err) {
