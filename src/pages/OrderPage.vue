@@ -176,7 +176,7 @@
                 <q-item-section>
                   <q-item-label>
                     {{ product.name }}
-                    {{ product.amount > 1 ? `X ${product.amount}` : "" }} -
+                    {{ product.amount > 1 ? `X ${product.amount}` : "" }}
                     <q-badge
                       color="amber"
                       label="Bekliyor"
@@ -184,7 +184,7 @@
                     />
                     <q-badge
                       color="blue"
-                      label="Onaylandı"
+                      label="Hazırlanıyor"
                       v-if="product.status === 'approved'"
                     />
                     <q-badge
