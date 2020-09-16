@@ -326,12 +326,30 @@ export default {
     dialogProduct: null,
     amount: 1,
     authenticated: false,
-    list: []
+    list: [],
+    ws: null
   }),
   mounted() {
     this.fetchMenu();
     if (this.$route.params.token) {
       this.checkToken();
+      this.ws = new WebSocket("wss://ws.dhnprojects.tk:3000");
+      this.ws.onmessage = function(e) {
+        if (e.data === "ping") {
+          this.ws.send("pong");
+        }
+      };
+      this.ws.onopen = function() {
+        this.ws.send(
+          JSON.stringify({
+            event: "tableLogin",
+            data: {
+              id: this.$route.params.id,
+              token: this.$route.params.token
+            }
+          })
+        );
+      };
     }
   },
   methods: {
