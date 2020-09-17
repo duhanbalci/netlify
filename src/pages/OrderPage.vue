@@ -310,9 +310,9 @@ import { nanoid } from "nanoid";
 let URL;
 if (process.env.DEV) {
   URL = "http://192.168.0.105:3000";
-  URL = "https://app.dhnprojects.tk";
+  URL = "https://app.tepsi.online";
 } else {
-  URL = "https://app.dhnprojects.tk";
+  URL = "https://app.tepsi.online";
 }
 export default {
   name: "PageIndex",
@@ -333,7 +333,7 @@ export default {
     this.fetchMenu();
     if (this.$route.params.token) {
       this.checkToken();
-      this.ws = new WebSocket("wss://ws.dhnprojects.tk:3000");
+      this.ws = new WebSocket("wss://ws.tepsi.online:3000");
       this.ws.addEventListener("open", e => {
         console.log("açıldı");
         this.ws.send(
