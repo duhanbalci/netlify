@@ -310,7 +310,7 @@ import { nanoid } from "nanoid";
 let URL;
 if (process.env.DEV) {
   URL = "http://192.168.0.105:3000";
-  // URL = 'https://app.dhnprojects.tk'
+  URL = "https://app.dhnprojects.tk";
 } else {
   URL = "https://app.dhnprojects.tk";
 }
@@ -334,12 +334,8 @@ export default {
     if (this.$route.params.token) {
       this.checkToken();
       this.ws = new WebSocket("wss://ws.dhnprojects.tk:3000");
-      this.ws.onmessage = function(e) {
-        if (e.data === "ping") {
-          this.ws.send("pong");
-        }
-      };
-      this.ws.onopen = function() {
+      this.ws.addEventListener("open", e => {
+        console.log("açıldı");
         this.ws.send(
           JSON.stringify({
             event: "tableLogin",
@@ -349,7 +345,23 @@ export default {
             }
           })
         );
-      };
+      });
+      this.ws.addEventListener("message", e => {
+        console.log("mesaj:" + e.data);
+        if (e.data === "ping") {
+          this.ws.send("pong");
+        } else {
+          try {
+            const m = JSON.parse(e.data);
+            if (m.event === "orderStatusChanged") {
+              this.fetchBill();
+            }
+          } catch (err) {
+            console.log("websocket mesajı pars edilemedi");
+            console.log(err);
+          }
+        }
+      });
     }
   },
   methods: {
@@ -385,6 +397,7 @@ export default {
           }
         );
         const p = res.data.map(v => v.products).flat(1);
+        this.bill = [];
         for (let i = 0; i < p.length; i++) {
           this.bill.push({
             id: p[i].id,
