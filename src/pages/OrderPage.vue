@@ -4,81 +4,10 @@
     <q-dialog
       transition-show="slide-up"
       transition-hide="slide-down"
-      v-model="dialogCart"
+      :value="$store.state.dialogCart"
+      @input="$store.commit('changeDialogCart', $event)"
     >
-      <q-card class="full-width">
-        <q-card-section class="full-width">
-          <q-list>
-            <div v-for="product in cart" :key="product.orderID">
-              <q-item class="q-py-none">
-                <q-item-section>
-                  <q-item-label>
-                    <q-btn
-                      icon="clear"
-                      color="red"
-                      size="md"
-                      flat
-                      dense
-                      @click="removeFromCart(product.orderID)"
-                    />
-                    {{ product.name }}
-                    {{
-                      product.amount > 1 ? `X ${product.amount}` : ""
-                    }}</q-item-label
-                  >
-                  <q-item-label caption v-if="product.add.length > 0">
-                    Ekle:
-                    {{
-                      product.add
-                        .map(
-                          v =>
-                            `${v.name}${
-                              v.price !== 0 ? ` - ₺${v.price / 100}` : ""
-                            }`
-                        )
-                        .join(", ")
-                    }}
-                  </q-item-label>
-                  <q-item-label caption v-if="product.remove.length > 0">
-                    Çıkar: {{ product.remove.join(", ") }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  ₺{{
-                    ((product.price +
-                      product.add
-                        .map(v => v.price)
-                        .reduce((acc, val) => acc + val, 0)) *
-                      product.amount) /
-                      100
-                  }}
-                </q-item-section>
-              </q-item>
-              <q-separator spaced inset />
-            </div>
-            <q-item v-if="cart.length > 0">
-              <q-item-section>Toplam: </q-item-section>
-              <q-item-section side>
-                ₺{{
-                  cart
-                    .map(
-                      v =>
-                        (v.price +
-                          v.add
-                            .map(v => v.price)
-                            .reduce((acc, val) => acc + val, 0)) *
-                        v.amount
-                    )
-                    .reduce((acc, val) => acc + val, 0) / 100
-                }}
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <q-btn color="green" class="full-width" @click="order"
-            >Siparişi Ver</q-btn
-          >
-        </q-card-section>
-      </q-card>
+      <Cart />
     </q-dialog>
     <!-- Sepete ekleme dialogu -->
     <q-dialog
@@ -166,87 +95,31 @@
     <q-dialog
       transition-show="slide-up"
       transition-hide="slide-down"
-      v-model="dialogBill"
+      :value="$store.state.dialogBill"
+      @input="$store.commit('changeDialogBill', $event)"
     >
-      <q-card class="full-width">
-        <q-card-section class="full-width" v-if="bill.length">
-          <q-list>
-            <div v-for="product in bill" :key="product.orderID">
-              <q-item class="q-py-none">
-                <q-item-section>
-                  <q-item-label>
-                    {{ product.name }}
-                    {{ product.amount > 1 ? `X ${product.amount}` : "" }}
-                    <q-badge
-                      color="amber"
-                      label="Bekliyor"
-                      v-if="product.status === 'waiting'"
-                    />
-                    <q-badge
-                      color="blue"
-                      label="Hazırlanıyor"
-                      v-if="product.status === 'approved'"
-                    />
-                    <q-badge
-                      color="green"
-                      label="Hazır"
-                      v-if="product.status === 'ready'"
-                    />
-                    <q-badge
-                      color="grey"
-                      label="Servis Edildi"
-                      v-if="product.status === 'done'"
-                    />
-                  </q-item-label>
-                  <q-item-label caption v-if="product.addp.length">
-                    Ekle: {{ product.addp.map(v => v.name).join(", ") }}
-                  </q-item-label>
-                  <q-item-label caption v-if="product.remove.length">
-                    Çıkar: {{ product.remove.join(", ") }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  ₺{{
-                    ((product.price +
-                      product.addp
-                        .map(v => v.price)
-                        .reduce((acc, val) => acc + val, 0)) *
-                      amount) /
-                      100
-                  }}
-                </q-item-section>
-              </q-item>
-              <q-separator spaced inset />
-            </div>
-            <q-item v-if="bill.length">
-              <q-item-section>Toplam: </q-item-section>
-              <q-item-section side>
-                ₺{{
-                  bill
-                    .map(
-                      v =>
-                        (v.price +
-                          v.addp
-                            .map(v => v.price)
-                            .reduce((acc, val) => acc + val, 0)) *
-                        v.amount
-                    )
-                    .reduce((acc, val) => acc + val, 0) / 100
-                }}
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <q-btn color="blue" class="full-width">Hesabı Öde</q-btn>
-        </q-card-section>
-      </q-card>
+      <Bill />
     </q-dialog>
     <!-- Tab menü -->
-    <q-tabs v-model="tab" class="bg-primary text-white shadow-2">
+    <q-tabs
+      v-model="tab"
+      :class="
+        $q.dark.isActive
+          ? 'bg-blue-grey-10 text-white shadow-2'
+          : 'bg-primary text-white shadow-2'
+      "
+    >
       <q-tab :name="l.id" :label="l.name" v-for="l in list" :key="l.id" />
     </q-tabs>
     <q-separator />
     <!-- Tabs -->
-    <q-tab-panels v-model="tab" animated swipeable keep-alive>
+    <q-tab-panels
+      v-model="tab"
+      animated
+      swipeable
+      keep-alive
+      class="full-height"
+    >
       <q-tab-panel :name="l.id" v-for="l in list" :key="l.id" class="q-px-none">
         <q-list>
           <template v-for="product in l.products">
@@ -285,57 +158,98 @@
         </q-list>
       </q-tab-panel>
     </q-tab-panels>
+    <!-- Cart Button -->
     <q-page-sticky
       position="bottom-right"
       :offset="[18, 18]"
-      v-show="cart.length > 0"
+      v-show="$store.state.cart.length"
     >
-      <q-btn fab icon="shopping_cart" color="accent" @click="dialogCart = true">
-        <q-badge color="green" floating>{{ cart.length }}</q-badge>
+      <q-btn
+        fab
+        icon="shopping_cart"
+        color="accent"
+        @click="$store.commit('changeDialogCart', true)"
+      >
+        <q-badge color="green" floating>{{ $store.state.cart.length }}</q-badge>
       </q-btn>
     </q-page-sticky>
+    <!-- Bill Button -->
     <q-page-sticky
       position="bottom-left"
       :offset="[18, 18]"
-      v-show="bill.length > 0"
+      v-show="$store.state.bill.length"
     >
-      <q-btn fab icon="receipt_long" color="teal" @click="dialogBill = true" />
+      <q-btn
+        fab
+        icon="receipt_long"
+        color="teal"
+        @click="$store.commit('changeDialogBill', true)"
+      />
     </q-page-sticky>
   </q-page>
 </template>
 
 <script>
-import { nanoid } from "nanoid";
+import Cart from "../components/Cart";
+import Bill from "../components/Bill";
 
-let URL;
-if (process.env.DEV) {
-  URL = "http://192.168.0.105:3000";
-  URL = "https://app.tepsi.online";
-} else {
-  URL = "https://app.tepsi.online";
-}
 export default {
   name: "PageIndex",
+  components: { Cart, Bill },
   data: () => ({
     tab: "",
     cart: [],
     bill: [],
     dialog: false,
-    dialogBill: false,
-    dialogCart: false,
     dialogProduct: null,
     amount: 1,
     authenticated: false,
     list: [],
-    ws: null
+    ws: null,
+    wsAlive: false,
+    pingInterval: null
   }),
   mounted() {
+    this.$store.commit("changeID", this.$route.params.id);
+    this.$store.commit("changeToken", this.$route.params.token);
+    this.$store.commit("changeAxios", this.$axios);
     this.fetchMenu();
     if (this.$route.params.token) {
       this.checkToken();
+      this.connectWS();
+    }
+  },
+  methods: {
+    async connectWS() {
       this.ws = new WebSocket("wss://ws.tepsi.online:3000");
+      this.ws.addEventListener("error", e => {
+        console.log("Socket error");
+        console.log(e);
+        console.log("Closing");
+        this.ws.close();
+      });
+      this.ws.addEventListener("close", e => {
+        console.log(
+          "Socket is closed. Reconnect will be attempted in 3 second."
+        );
+        console.log(e);
+        setTimeout(() => {
+          this.connectWS();
+        }, 3000);
+      });
       this.ws.addEventListener("open", e => {
-        console.log("açıldı");
+        console.log("connected");
+
+        this.wsAlive = true;
+        clearInterval(this.pingInterval);
+        this.pingInterval = setInterval(() => {
+          if (this.wsAlive === false) {
+            console.log("biz kapadık moruq");
+            this.ws.close();
+          }
+          this.wsAlive = false;
+        }, 10000);
+
         this.ws.send(
           JSON.stringify({
             event: "tableLogin",
@@ -347,9 +261,9 @@ export default {
         );
       });
       this.ws.addEventListener("message", e => {
-        console.log("mesaj:" + e.data);
         if (e.data === "ping") {
           this.ws.send("pong");
+          this.wsAlive = true;
         } else {
           try {
             const m = JSON.parse(e.data);
@@ -357,17 +271,15 @@ export default {
               this.fetchBill();
             }
           } catch (err) {
-            console.log("websocket mesajı pars edilemedi");
+            console.log("websocket mesajı parse edilemedi");
             console.log(err);
           }
         }
       });
-    }
-  },
-  methods: {
+    },
     async checkToken() {
       try {
-        await this.$axios.get(`${URL}/table/checktoken`, {
+        await this.$axios.get(`${this.$store.state.URL}/table/checktoken`, {
           headers: {
             authorization: `Bearer ${this.$route.params.token}`
           }
@@ -380,41 +292,16 @@ export default {
     },
     async fetchMenu() {
       const res = await this.$axios.get(
-        `${URL}/product/menu/${this.$route.params.id}`
+        `${this.$store.state.URL}/product/menu/${this.$route.params.id}`
       );
       this.list = res.data.category;
       this.tab = this.list[0].id;
       this.$store.commit("changeTableName", res.data.table);
     },
     async fetchBill() {
-      try {
-        const res = await this.$axios.get(
-          `${URL}/table/bill/${this.$route.params.id}`,
-          {
-            headers: {
-              authorization: `Bearer ${this.$route.params.token}`
-            }
-          }
-        );
-        const p = res.data.map(v => v.products).flat(1);
-        this.bill = [];
-        for (let i = 0; i < p.length; i++) {
-          this.bill.push({
-            id: p[i].id,
-            name: p[i].name,
-            amount: p[i].amount,
-            addp: p[i].addp,
-            remove: p[i].remove,
-            price: p[i].price,
-            status: p[i].status
-          });
-        }
-      } catch (err) {
-        console.log(err);
-      }
+      this.$store.dispatch("fetchBill");
     },
     openDialog(obj) {
-      // this.cart.push(obj)
       this.dialog = true;
       this.dialogProduct = {
         ...obj
@@ -429,54 +316,11 @@ export default {
       }));
     },
     addToCart() {
-      this.dialogProduct.add = this.dialogProduct.addable.filter(
-        v => v.value === true
-      );
-      this.dialogProduct.remove = this.dialogProduct.removable
-        .filter(v => v.value === true)
-        .map(v => v.name);
       this.dialogProduct.amount = this.amount;
-      this.dialogProduct.orderID = nanoid(40);
-      this.cart.push(this.dialogProduct);
+      this.$store.commit("addToCart", this.dialogProduct);
       this.dialog = false;
       this.amount = 1;
       this.dialogProduct = null;
-    },
-    async order() {
-      for (const p of this.cart) {
-        p.add = p.add.map(v => v.id);
-      }
-      try {
-        await this.$axios.post(
-          `${URL}/table/order/${this.$route.params.id}`,
-          this.cart,
-          {
-            headers: {
-              authorization: `Bearer ${this.$route.params.token}`
-            }
-          }
-        );
-        this.$q.notify({
-          type: "positive",
-          message: `Siparişin verildi`
-        });
-        this.dialogCart = false;
-        this.cart = [];
-        await this.fetchBill();
-      } catch (error) {
-        console.log(error);
-        this.$q.notify({
-          type: "negative",
-          message: `Hata: ${error.response.data.message}`
-        });
-      }
-    },
-    removeFromCart(id) {
-      for (let i = 0; i < this.cart.length; i++) {
-        if (this.cart[i].orderID == id) {
-          this.cart.splice(i, 1);
-        }
-      }
     }
   }
 };
