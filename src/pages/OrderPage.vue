@@ -211,12 +211,16 @@ export default {
     if (this.$route.query.t) {
       localStorage.setItem("token", this.$route.query.t);
       this.$store.commit("changeToken", this.$route.query.t);
-      this.checkToken();
     } else {
       if (localStorage.getItem("token")) {
         this.$store.commit("changeToken", localStorage.getItem("token"));
         this.checkToken();
       }
+    }
+    console.log(localStorage.getItem("token"));
+    if (localStorage.getItem("token")) {
+      console.log("selam");
+      this.checkToken();
     }
     this.$store.dispatch("fetchMenu");
   },
