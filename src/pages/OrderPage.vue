@@ -109,7 +109,12 @@
           : 'bg-primary text-white shadow-2'
       "
     >
-      <q-tab :name="l.id" :label="l.name" v-for="l in list" :key="l.id" />
+      <q-tab
+        :name="l.id"
+        :label="l.name"
+        v-for="l in $store.state.menu"
+        :key="l.id"
+      />
     </q-tabs>
     <q-separator />
     <!-- Tabs -->
@@ -120,7 +125,12 @@
       keep-alive
       class="full-height"
     >
-      <q-tab-panel :name="l.id" v-for="l in list" :key="l.id" class="q-px-none">
+      <q-tab-panel
+        :name="l.id"
+        v-for="l in $store.state.menu"
+        :key="l.id"
+        class="q-px-none"
+      >
         <q-list>
           <template v-for="product in l.products">
             <q-item :key="product.id + 100" class="q-py-none">
@@ -158,37 +168,8 @@
         </q-list>
       </q-tab-panel>
     </q-tab-panels>
-    <!-- Cart Button -->
-    <q-page-sticky
-      position="bottom-right"
-      :offset="[18, 18]"
-      v-show="$store.state.cart.length"
-    >
-      <q-btn
-        fab
-        icon="shopping_cart"
-        color="accent"
-        @click="$store.commit('changeDialogCart', true)"
-      >
-        <q-badge color="green" floating>{{ $store.state.cart.length }}</q-badge>
-      </q-btn>
-    </q-page-sticky>
-    <!-- Bill Button -->
-    <q-page-sticky
-      position="bottom-left"
-      :offset="[18, 18]"
-      v-show="$store.state.bill.length"
-    >
-      <q-btn
-        fab
-        icon="receipt_long"
-        color="teal"
-        @click="$store.commit('changeDialogBill', true)"
-      />
-    </q-page-sticky>
   </q-page>
 </template>
-
 <script>
 import Cart from "../components/Cart";
 import Bill from "../components/Bill";
@@ -197,27 +178,47 @@ export default {
   name: "PageIndex",
   components: { Cart, Bill },
   data: () => ({
-    tab: "",
     cart: [],
     bill: [],
     dialog: false,
     dialogProduct: null,
     amount: 1,
     authenticated: false,
-    list: [],
     ws: null,
     wsAlive: false,
     pingInterval: null
   }),
-  mounted() {
-    this.$store.commit("changeID", this.$route.params.id);
-    this.$store.commit("changeToken", this.$route.params.token);
-    this.$store.commit("changeAxios", this.$axios);
-    this.fetchMenu();
-    if (this.$route.params.token) {
-      this.checkToken();
-      this.connectWS();
+  computed: {
+    tab: {
+      get() {
+        return this.$store.state.tab;
+      },
+      set(val) {
+        this.$store.commit("changeTab", val);
+      }
     }
+  },
+  mounted() {
+    this.$store.commit("changeAxios", this.$axios);
+    if (this.$route.query.id) {
+      this.$store.commit("changeID", this.$route.query.id);
+      localStorage.setItem("id", this.$route.query.id);
+    } else if (localStorage.getItem("id")) {
+      this.$store.commit("changeID", localStorage.getItem("id"));
+    } else {
+      this.$router.push("/");
+    }
+    if (this.$route.query.t) {
+      localStorage.setItem("token", this.$route.query.t);
+      this.$store.commit("changeToken", this.$route.query.t);
+      this.checkToken();
+    } else {
+      if (localStorage.getItem("token")) {
+        this.$store.commit("changeToken", localStorage.getItem("token"));
+        this.checkToken();
+      }
+    }
+    this.$store.dispatch("fetchMenu");
   },
   methods: {
     async connectWS() {
@@ -235,7 +236,7 @@ export default {
         console.log(e);
         setTimeout(() => {
           this.connectWS();
-        }, 3000);
+        }, 1000);
       });
       this.ws.addEventListener("open", e => {
         console.log("connected");
@@ -254,8 +255,8 @@ export default {
           JSON.stringify({
             event: "tableLogin",
             data: {
-              id: this.$route.params.id,
-              token: this.$route.params.token
+              id: this.$store.state.id,
+              token: this.$store.state.token
             }
           })
         );
@@ -281,22 +282,15 @@ export default {
       try {
         await this.$axios.get(`${this.$store.state.URL}/table/checktoken`, {
           headers: {
-            authorization: `Bearer ${this.$route.params.token}`
+            authorization: `Bearer ${this.$store.state.token}`
           }
         });
         this.authenticated = true;
         await this.fetchBill();
+        await this.connectWS();
       } catch (err) {
         console.log(err);
       }
-    },
-    async fetchMenu() {
-      const res = await this.$axios.get(
-        `${this.$store.state.URL}/product/menu/${this.$route.params.id}`
-      );
-      this.list = res.data.category;
-      this.tab = this.list[0].id;
-      this.$store.commit("changeTableName", res.data.table);
     },
     async fetchBill() {
       this.$store.dispatch("fetchBill");

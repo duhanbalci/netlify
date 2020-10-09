@@ -8,8 +8,24 @@ const routes = [
         component: () => import("pages/Index.vue")
       },
       {
-        path: ":id/:token?",
+        path: "table",
+        name: "table",
         component: () => import("pages/OrderPage.vue")
+      },
+      {
+        path: "user",
+        name: "user",
+        component: () => import("components/User.vue")
+      },
+      {
+        path: "cart",
+        name: "cart",
+        component: () => import("components/Cart.vue")
+      },
+      {
+        path: "bill",
+        name: "bill",
+        component: () => import("components/Bill.vue")
       }
     ]
   },

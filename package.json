@@ -1,8 +1,8 @@
 {
   "name": "cfui",
   "version": "0.0.1",
-  "description": "cfui",
-  "productName": "cfui",
+  "description": "Tepsi.Online",
+  "productName": "Tepsi.Online",
   "author": "duhanbalci <duhanbalci@msn.com>",
   "private": true,
   "scripts": {

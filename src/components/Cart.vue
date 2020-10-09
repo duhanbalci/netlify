@@ -1,9 +1,12 @@
 <template>
-  <q-card class="full-width">
-    <q-card-section class="full-width">
-      <q-list>
+  <q-page class="full-height">
+    <div class="column full-height">
+      <div class="col-auto q-py-md text-center text-h4">
+        Tepsim
+      </div>
+      <q-list class="col" style="overflow: scroll">
         <div v-for="product in cart" :key="product.orderID">
-          <q-item class="q-py-none">
+          <q-item class="q-py-none" dense>
             <q-item-section>
               <q-item-label>
                 <q-btn
@@ -49,6 +52,8 @@
           </q-item>
           <q-separator spaced inset />
         </div>
+      </q-list>
+      <div class="col-auto q-py-sm">
         <q-item v-if="cart.length > 0">
           <q-item-section>Toplam: </q-item-section>
           <q-item-section side>
@@ -66,12 +71,12 @@
             }}
           </q-item-section>
         </q-item>
-      </q-list>
-      <q-btn color="green" class="full-width" @click="order"
-        >Siparişi Ver</q-btn
-      >
-    </q-card-section>
-  </q-card>
+        <q-btn no-caps color="green" class="full-width" @click="order"
+          >Sipariş Ver</q-btn
+        >
+      </div>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -84,6 +89,7 @@ export default {
   computed: {
     ...mapState(["cart"])
   },
+  mounted() {},
   methods: {
     async order() {
       for (const p of this.cart) {
@@ -91,11 +97,11 @@ export default {
       }
       try {
         await this.$axios.post(
-          `${this.$store.state.URL}/table/order/${this.$route.params.id}`,
+          `${this.$store.state.URL}/table/order/${this.$store.state.id}`,
           this.cart,
           {
             headers: {
-              authorization: `Bearer ${this.$route.params.token}`
+              authorization: `Bearer ${this.$store.state.token}`
             }
           }
         );
@@ -103,7 +109,7 @@ export default {
           type: "positive",
           message: `Siparişin verildi`
         });
-        this.$store.commit("changeDialogCart", false);
+        this.$router.push("table");
         this.$store.commit("clearCart");
         await this.$store.dispatch("fetchBill");
       } catch (error) {
